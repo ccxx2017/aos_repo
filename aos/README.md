@@ -1,30 +1,18 @@
-# AOS
+﻿# AOS — 数字员工组织工作区
 
-AOS 表示 **Agentic Organization System**。
+## 目录结构
 
-它是 AI 数字组织的操作知识与运行工作区。
-AOS = Boss + Agents + Memory + Projects + Runtime + Archive
+| 目录 | 用途 |
+|------|------|
+| org/ | 组织定义（角色 Chater、架构、Boss 手册） |
+| untime/tickets/ | 正式工单系统（open → doing → blocked → done） |
+| 	asks/ | Boss 随手记 backlog（不成形想法 / 待办） |
+| eports/org/ | 组织自身报告（绩效、工单统计） |
+| eports/project/ | 项目状态报告（duty_reporter 日报等） |
+| decisions/ | 组织运行决策（ORD），区别于 docs/decisions/ |
 
-它不是普通 wiki。
+## tasks/ 与 runtime/tickets/ 的分工
 
-## Domains
-
-| 领域 | 路径 | 含义 |
-|---|---|---|
-| Organization | `org/` | Boss、agents、roles、policies、registry |
-| Projects | `projects/` | 被管理项目的知识与项目级归档 |
-| Runtime | `runtime/` | 当前 tickets、reports、runs、logs、status |
-| Archive | `archive/` | 跨领域或未分类历史材料 |
-
-## Archive Rule
-
-```text
-项目相关归档   -> projects/<project_id>/archive/
-组织相关归档   -> org/archive/
-运行相关归档   -> runtime/archive/
-跨域/未分类归档 -> archive/
-
-Naming Note
-本目录原名为 wiki/。
-
-由于它现在不仅包含静态知识页面，还包含组织定义、项目状态、运行工单、报告与历史记忆，因此重命名为 aos/。
+- **tasks/** 是你的个人灵感和临时清单，不需要状态机，一句话也行
+- **runtime/tickets/** 是正式工单，指派给数字员工，遵循 open → doing → done 状态机
+- 一个想法成熟后，从 	asks/backlog.md 提升为正式 TKT-xxx 工单

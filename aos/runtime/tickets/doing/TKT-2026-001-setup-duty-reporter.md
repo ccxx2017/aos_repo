@@ -49,13 +49,13 @@ tags:             [agents, bootstrap, first-hire]
 ## Deliverable Spec
 
 ### 必须产出
-- [ ] **Charter 文档**：`docs/wiki/agents/agent-duty-reporter.md`
+- [ ] **Charter 文档**：`aos/org/agents/agent-duty-reporter.md`
   - 必须符合 `_charter-template.md v0.1`，八节齐全
   - Front Matter 完整，初始 `status: draft`
 - [ ] **Runtime 实现**：`~/.openclaw/workspace/skills/duty-reporter/SKILL.md`
   - 至少覆盖：读取健康 API → 生成日报 → 推送 feishu
 - [ ] **花名册登记**：在 `agents/_index.md` 中新增条目
-- [ ] **每日产出落地**：`docs/wiki/boss/daily.md`（每日覆盖）
+- [ ] **每日产出落地**：`aos/org/boss/daily.md`（每日覆盖）
 
 ### 验收标准
 - [ ] Charter 经 Boss 审阅通过

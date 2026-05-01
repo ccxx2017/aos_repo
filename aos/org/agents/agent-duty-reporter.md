@@ -1,7 +1,7 @@
 ---
 agent_id:        agent-duty-reporter
 name:            值班汇报员
-version:         0.1
+version:         V0.1.1
 status:          draft
 owner:           boss
 created:         2026-04-23

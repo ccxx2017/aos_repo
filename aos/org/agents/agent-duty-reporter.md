@@ -8,7 +8,7 @@ created:         2026-04-23
 last_reviewed:   2026-04-23
 runtime:         openclaw
 runtime_ref:     ~/.openclaw/workspace/skills/duty-reporter/SKILL.md
-channels:        [telegram, wiki-commit, cron]
+channels:        [feishu, wiki-commit, cron]
 tags:            [reporting, monitoring, first-hire]
 ---
 
@@ -35,14 +35,14 @@ tags:            [reporting, monitoring, first-hire]
 
 | 来源 | 类型 | 访问方式 | 频率 |
 |------|------|----------|------|
-| 系统健康 API | REST | `GET /api/health`（具体端点由 SKILL.md 配置） | 每次运行 |
-| 仓库 Wiki | 文件 | 读 `docs/wiki/tickets/open/` 统计当前 open 工单数 | 每次运行 |
-| 昨日日报 | 文件 | 读 `boss/daily.md` 作对比 | 每次运行 |
+| 系统健康 API | REST | `GET api/v1/settings/v1/health`（具体端点由 SKILL.md 配置） | 每次运行 |
+| 仓库 Wiki | 文件 | 读 `aos\runtime\tickets\open` 统计当前 open 工单数 | 每次运行 |
+| 昨日日报 | 文件 | 读 `aos\reports\project\daily\_latest.md` 作对比 | 每次运行 |
 
 ### 2.3 触发方式
 - ✅ **定时**：`cron: 0 8 * * *`（每日 08:00 生成日报）
 - ✅ **事件**：健康 API 返回非 `ok` 时立即触发异常流程
-- ✅ **对话**：Boss 在 Telegram 发 `/report` 手动触发
+- ✅ **对话**：Boss 在 feishu 发 `/report` 手动触发
 - ❌ 工单派发：本员工**不接受**动态工单派发
 
 ---
@@ -53,8 +53,8 @@ tags:            [reporting, monitoring, first-hire]
 
 | 产出类型 | 格式 | 落地位置 | 命名 |
 |---------|------|----------|------|
-| 每日日报 | Markdown | `docs/wiki/boss/daily.md` | 覆盖写 |
-| 异常告警 | 文本 | Telegram | 即时推送 |
+| 每日日报 | Markdown | `aos\reports\project\daily/daily.md` | 覆盖写 |
+| 异常告警 | 文本 | feishu | 即时推送 |
 | Git commit | — | Wiki 仓 | `chore(duty): daily report YYYY-MM-DD` |
 
 ### 3.2 日报必须包含
@@ -79,7 +79,7 @@ tags:            [reporting, monitoring, first-hire]
 ## 4. 权限
 
 ### 4.1 读权限
-- docs/wiki/** ✅
+- docs/** ✅
 - 系统健康 API ✅
 - .env, secrets/** ❌
 - 业务数据库 ❌
@@ -91,7 +91,7 @@ tags:            [reporting, monitoring, first-hire]
 
 ### 4.3 执行权限
 - ✅ 调用健康 API（只读）
-- ✅ 向 Telegram 推送消息
+- ✅ 向 feishu 推送消息
 - ✅ 向 Wiki 仓库提交 commit（仅限 daily.md）
 - ❌ 任何写数据库、调部署、改配置的动作
 
@@ -107,7 +107,7 @@ tags:            [reporting, monitoring, first-hire]
 ## 5. 协作关系
 
 ### 5.1 上游
-- **Boss**（通过 cron 配置 + Telegram 手动触发）
+- **Boss**（通过 cron 配置 + feishu 手动触发）
 - **健康 API**（事件触发）
 
 ### 5.2 下游
@@ -115,8 +115,8 @@ tags:            [reporting, monitoring, first-hire]
 - 未来可能：工单管家 agent 会读取 daily.md 做二次聚合（届时再签约定）
 
 ### 5.3 汇报策略
-- **每日 08:00**：日报推 Telegram + 写 daily.md
-- **异常**：即时推 Telegram，前缀 `⚠️ [DUTY-ALERT]`
+- **每日 08:00**：日报推 feishu + 写 daily.md
+- **异常**：即时推 feishu，前缀 `⚠️ [DUTY-ALERT]`
 - **静默**：22:00 ~ 次日 07:00 的**非 p0 异常**累积到早报，不打扰
 - **p0 异常**：任何时段立即推送
 
@@ -126,7 +126,7 @@ tags:            [reporting, monitoring, first-hire]
 
 ### 6.1 心跳信号
 - 每日 08:00 ± 15min 内必须有日报产出
-- **连续 2 日无产出 → Telegram 告警给 Boss**
+- **连续 2 日无产出 → feishu 告警给 Boss**
 - **连续 3 日无产出 → `status` 自动变为 `paused`**
 
 ### 6.2 合格判定
@@ -146,7 +146,7 @@ tags:            [reporting, monitoring, first-hire]
 ### 7.1 技术栈
 - Runtime: **OpenClaw**
 - Skill: `~/.openclaw/workspace/skills/duty-reporter/SKILL.md`
-- 依赖：健康 API SDK、Telegram bot token（从 secrets 注入）
+- 依赖：健康 API SDK、feishu bot token（从 secrets 注入）
 
 ### 7.2 部署与启停
 - **启动**：cron 配置生效即启动
@@ -157,7 +157,7 @@ tags:            [reporting, monitoring, first-hire]
 ### 7.3 可观测性
 - 日志：OpenClaw 运行日志（默认路径）
 - 关键指标：每日运行成功/失败、日报生成耗时、告警次数
-- 排查入口：Boss 在 Telegram 发 `/duty-status` 查询最近 7 日运行情况
+- 排查入口：Boss 在 feishu 发 `/duty-status` 查询最近 7 日运行情况
   （此命令在 v0.2 实现，v0.1 先不做）
 
 ---

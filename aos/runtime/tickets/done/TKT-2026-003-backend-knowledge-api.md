@@ -1,7 +1,7 @@
 ---
 id: TKT-2026-003
 title: 后端：知识库只读 HTTP API + 写侧自动落库
-status: open
+status: closed
 priority: high
 assigned_to: boss
 created_at: 2026-05-06

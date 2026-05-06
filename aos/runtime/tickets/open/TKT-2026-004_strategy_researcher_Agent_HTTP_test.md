@@ -125,3 +125,12 @@ push 失败 → 30s 后重试一次，仍失败则 worklog 加 `git_push_failed`
 ## Worklog
 
 <!-- agent append below -->
+
+### 2026-05-06 08:05 UTC  agent-strategy-researcher
+- phase0_git_sync: ok
+- skill_files_present: ok（注：目录实际名为 strategy_researcher 非 strategy-researcher）
+- help_check: ok（3/3 python3 --help rc=0）
+- smoke_test: ok（KB index/archives/log 均返回正常数据，404 分支正确）
+- network_error_exit_code: 1 (ok)
+- summary: aos/runtime/research-runs/TKT-2026-004/summary.md
+- 结论: ready_for_TKT-2026-005

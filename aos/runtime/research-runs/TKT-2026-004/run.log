@@ -1,0 +1,34 @@
+=== TKT-2026-004 执行日志 ===
+时间: 2026-05-06 16:xx CST
+
+--- Step 1: git pull --rebase ---
+已经是最新的。
+
+--- Step 2: 校验技能目录 ---
+ls -l /home/ccxx/.openclaw/workspace/skills/strategy_researcher/scripts/
+- call_builder.py (shebang OK)
+- call_backtest.py (shebang OK)
+- kb_query.py (shebang OK)
+- smoke_http_clients.sh (chmod +x OK)
+注：实际路径为 strategy_researcher（下划线），非 ticket 中写的 strategy-researcher（连字符）。
+
+--- Step 3: --help 自检 ---
+call_builder.py --help → rc=0
+call_backtest.py --help → rc=0
+kb_query.py --help → rc=0
+
+--- Step 4: 连通性冒烟 ---
+QUANT_BACKEND_URL=http://192.168.1.136:8000 bash scripts/smoke_http_clients.sh
+- kb_query index: OK (返回策略索引数据)
+- kb_query archives: OK (返回存档列表)
+- kb_query archive (fake_id): 404 correctly surfaced (exit 2)
+- kb_query log: OK (返回研究日志)
+后端 192.168.1.136:8000 可达。
+
+--- Step 5: 网络错误分支 ---
+python3 scripts/kb_query.py --base-url http://192.168.1.136:1 --timeout 3 index
+{"ok": false, "error": "network_error", "detail": "<urlopen error timed out>"}
+rc=1 (符合预期)
+
+--- 结论 ---
+所有步骤通过，准备就绪。

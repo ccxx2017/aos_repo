@@ -7,7 +7,7 @@ owner:           boss
 created:         2026-05-05
 last_reviewed:   2026-05-05
 runtime:         openclaw
-runtime_ref:     ~/.openclaw/workspace/skills/strategy-researcher/SKILL.md
+runtime_ref:     ~/.openclaw/workspace/skills/strategy_researcher/SKILL.md
 channels:        [ticket-driven, wiki-commit]
 tags:            [research, llm, autonomous, second-hire]
 ---
@@ -200,7 +200,7 @@ tags:            [research, llm, autonomous, second-hire]
 
 ### 7.1 技术栈
 - Runtime: **OpenClaw**
-- Skill: `~/.openclaw/workspace/skills/strategy-researcher/SKILL.md`
+- Skill: `~/.openclaw/workspace/skills/strategy_researcher/SKILL.md`
 - 依赖：Python ≥ 3.10，仅标准库（`urllib` + `json`，与 quant_assistant 风格一致）
 - LLM: 默认通过 `/api/v1/strategy-builder/invoke` 间接使用，本员工**不直接调用 LLM API**
 

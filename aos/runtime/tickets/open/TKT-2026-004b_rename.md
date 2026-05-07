@@ -106,3 +106,24 @@ TKT-2026-004 交付核验中发现命名歧义：
   2. ⏳ Pending user verification on Ubuntu (`kb_query.py index` → 200)
   3. ✅ N/A — no commit needed (Windows already correct)
   4. ⏳ Pending Ubuntu verification → then close
+### 2026-05-07 14:35 CST  openclaw-agent (修正：路径引用改为下划线)
+
+**修正原因**：工单交付核验发现路径引用应使用下划线 `strategy_researcher`，而非连字符 `strategy-researcher`。
+
+**修改内容 (Ubuntu 端)**：
+- `mv ~/.openclaw/workspace/skills/strategy-researcher ~/.openclaw/workspace/skills/strategy_researcher`（目录回滚）
+- `aos/org/agents/agent-strategy-researcher.md` — 2 处路径引用修正
+- `aos/runtime/research-runs/TKT-2026-004/summary.md` — 描述修正
+- `~/.openclaw/workspace/skills/strategy_researcher/SKILL.md` — `runtime_dir` 路径修正
+
+**commit**: `fix(skills): revert directory path references to strategy_researcher (underscore)` → `7d26e21`
+**需更正的 commit**：上一次的 `chore(skills): rename strategy_researcher → strategy-researcher` (`2031964`) 方向错误，已通过本 commit 覆盖
+
+**命名规则确认**：
+| 场景 | 命名 | 示例 |
+|------|------|------|
+| 目录路径 | 下划线 | `skills/strategy_researcher/` |
+| agent-id | 连字符 | `agent-strategy-researcher` |
+| SKILL.md name | 连字符 | `strategy-researcher` |
+| Charter 名称 | 连字符 | `agent-strategy-researcher.md` |
+| 叙述性引用 | 连字符 | "strategy-researcher 数字员工" |

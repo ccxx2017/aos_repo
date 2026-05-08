@@ -207,7 +207,7 @@ tags:            [research, llm, autonomous, second-hire]
 ### 7.2 部署与启停
 - **启动**：Boss 把工单 status 改为 `assigned`，本员工被 OpenClaw 调度执行 `research_loop.py {ticket_id}`
 - **停用（paused）**：Charter `status: paused` 后，本员工拒绝新工单
-- **退休（retired）**：skill 代码移入 `skills/_archive/strategy-researcher/`，Charter 保留
+- **退休（retired）**：skill 代码移入 `skills/_archive/strategy_researcher/`，Charter 保留
 
 ### 7.3 可观测性
 - 日志：OpenClaw 默认日志路径 + `aos/runtime/research-runs/{ticket_id}/run.log`

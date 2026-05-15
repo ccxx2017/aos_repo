@@ -1,0 +1,11 @@
+{
+  "ticket_id": "TKT-TEST-000",
+  "run_dir": "/home/ccxx/aos_repo/aos/runtime/research-runs/TKT-TEST-000",
+  "rounds": [],
+  "summary": {
+    "num_rounds": 0,
+    "num_with_backtest": 0,
+    "best_by_sharpe_ratio": null,
+    "best_by_calmar_ratio": null
+  }
+}

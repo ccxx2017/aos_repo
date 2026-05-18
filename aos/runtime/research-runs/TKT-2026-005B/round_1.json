@@ -1,0 +1,18 @@
+{
+  "hypothesis": "A股VCP形态突破可通过4阶段IR量化: 观望→回调整理(缩量+波动收缩)→放量突破→持仓止损。5个条件(回撤<60%+ATR收缩<0.8+量比<0.7+放量>1.5倍+突破20日高)同时满足时有统计优势。",
+  "builder_response": {
+    "strategy_id": "stg_20260518_2ee7d5",
+    "intent": "breakout",
+    "phases": ["watch", "pullback", "breakout", "holding"]
+  },
+  "backtest": {
+    "run_id": "run-1547739a-20180101-20241231-34868704",
+    "status": "completed",
+    "trade_count": 0,
+    "total_return": -1.0,
+    "sharpe_ratio": -0.372,
+    "max_drawdown": 1.0,
+    "notes": "equity went negative, no trades executed"
+  },
+  "analysis": "Round 1失败原因: 4阶段IR中watch→pullback阶段的条件volume>volume_ma(20)*1.5与pullback阶段需要缩量的逻辑矛盾——需要在入场阶段放量,但check_phase阶段使用了放量条件。结果: 0笔交易,全部资金因无买入信号+默认止损触发而亏完。下一轮修正: 简化至2阶段(v1),使用标准trend_following风格IR: phase1 watch→holding(买入条件: 放量突破), phase2 holding→watch(卖出条件: 均线破位)。先跑出有交易的基线。"
+}

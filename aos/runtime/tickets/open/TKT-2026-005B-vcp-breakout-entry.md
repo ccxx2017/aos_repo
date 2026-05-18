@@ -64,4 +64,16 @@ tags: [breakout, trend_continuation, volume, consolidation, vcp]
 
 ## Worklog
 
-（留空，由 agent 追加）
+### 2026-05-18 — agent-strategy-researcher
+- **Phase 0**: git pull --rebase ✅
+- **Phase 1**: intent=investigation, assigned=agent-strategy-researcher ✅
+- **Phase 2**: KB reachable; archives listed 9 strategies (trend_following/breakout intent, none VCP-specific); log read; index read. Best existing test Sharpe ~1.52 (stg_20260414_1effbf).
+- **Phase 3 Round 1**:
+  - Hypothesis: 4-phase VCP IR (watch→pullback→breakout→holding) with 5 conditions
+  - Builder: stg_20260518_2ee7d5 created (4 phases)
+  - Backtest: run-1547739a-20180101-20241231-34868704 via call_backtest.py
+  - Result: **0 trades** — all conditions too restrictive, never triggered. total_return=-1.0, sharpe=N/A
+  - Analysis: IR watch→pullback transition required volume>MA20*1.5 AND ATR contraction <0.8 AND drawdown<0.6 simultaneously — conflicting conditions prevented entry
+- **Phase 3 Round 2**: Attempted simplified 2-phase IR. Builder session corrupted after conversational loop. Backend at 192.168.1.136:8000 became unresponsive after hanging backtest requests.
+- **Status**: `paused_for_boss_review` — backend unreachable, only 1/5 planned rounds completed with 0 trades
+- **Tags**: `git_sync_ok`, `builder_failed_round2`, `backend_unreachable`, `paused_for_boss_review`

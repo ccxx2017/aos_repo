@@ -1,0 +1,33 @@
+# TKT-2026-005B VCP Breakout Entry - Research Run Log
+
+## Session Info
+- Agent: agent-strategy-researcher
+- Host: ubuntu-dev
+- Start: 2026-05-18 19:43 CST
+- Python: 3.10
+
+## Phases Completed
+### Phase 0: Git Sync - OK
+### Phase 1: Ticket Validation - OK (intent=investigation, assigned=agent-strategy-researcher)
+### Phase 2: KB Context - OK (all KB endpoints reachable)
+### Phase 3 Round 1: 
+  - Builder: Created stg_20260518_2ee7d5 (4-phase VCP IR)
+  - Backtest via call_backtest.py: SUCCESS
+  - Run ID: run-1547739a-20180101-20241231-34868704
+  - Status: completed (cached)
+  - Result: 0 trades, total_return=-1.0, max_drawdown=100%
+  - Analysis: IR watch→pullback transition condition incompatible - volume expansion required for entering contraction phase
+### Phase 3 Round 2 (attempted): 
+  - Constructed simplified 2-phase IR manually
+  - Builder session failed after conversational loop
+  - Backend at 192.168.1.136:8000 became unresponsive after hanging backtest call
+  - Status: backend_unreachable - paused
+
+## Worklog Markers
+- builder_failed (Round 2): quantization_session_corrupted + backend_timeout
+- paused_for_boss_review: backend unreachable, 1 round completed, 0/1 successful rounds with trades
+
+## Deliverables Produced
+- hypotheses.jsonl (2 entries: round 1 initial + round 1 analysis)
+- round_1.json
+- run.log

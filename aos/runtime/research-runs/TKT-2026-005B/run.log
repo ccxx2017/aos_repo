@@ -31,3 +31,18 @@
 - hypotheses.jsonl (2 entries: round 1 initial + round 1 analysis)
 - round_1.json
 - run.log
+
+### 2026-05-19 (smoke run — Round 3)
+- Phase 0: git pull --rebase ✅
+- Phase 1: ticket validation ✅ (ready_for_limited_resume)
+- Phase 2: KB archives read (18 strategies, 2 mean_reversion, 16 trend_following)
+- Phase 3 Round 3 (smoke):
+  - Builder session: research_TKT-2026-005B-smoke (new, not corrupted session)
+  - Strategy IR: stg_20260519_93340b (3-phase: trend → pullback → breakout)
+  - Backtest: NOT executed. Builder entered multi-turn conversation loop (5 turns without resolving), then session state reset.
+  - Backend 500 on direct backtest call (incorrect manual IR format)
+  - Status: builder_session_corrupted
+  - Tags: smoke_run, builder_failed, builder_session_corrupted, no_backtest
+- Smoke constraints verified: symbols=5 ✅, years=1 ✅ (2025-01-01 to 2025-12-31), timeout=90s ✅
+- No backend failure / 5xx / timeout/connection failure on the builder endpoint (builder responded 200 each time but never executed backtest)
+- Backend 500 only on our manual direct backtest call (not builder-triggered)

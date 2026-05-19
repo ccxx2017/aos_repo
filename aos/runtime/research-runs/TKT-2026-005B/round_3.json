@@ -1,0 +1,31 @@
+{
+  "hypothesis": "Smoke run: simplified 3-phase VCP IR (trend→pullback→breakout) with relaxed conditions.",
+  "builder_response": {
+    "ok": true,
+    "status": 200,
+    "strategy_id": "stg_20260519_93340b",
+    "strategy_config": {
+      "name": "策略构建器生成策略",
+      "description": "Smoke test: simplified VCP 2-phase IR",
+      "intent": "trend_following",
+      "phases": ["phase_trend", "phase_setup", "phase_trigger"],
+      "primitives": ["p_001_ma_trend", "p_002_volatility_contraction", "p_003_price_vs_highest", "p_004_volume_ratio"]
+    },
+    "strategy_ir": {
+      "strategy_id": "stg_20260519_93340b",
+      "intent": "trend_following",
+      "initial_phase": "watch",
+      "phases": [
+        {"id": "watch", "label": "观望/确认趋势", "transitions": [{"to": "pullback", "condition": "MA20 > MA60", "action": "NONE"}]},
+        {"id": "pullback", "label": "等待回调结构", "transitions": [{"to": "breakout", "condition": "ATR5 / ATR20 < 0.8", "action": "NONE"}]},
+        {"id": "breakout", "label": "等待触发信号", "transitions": [{"to": "holding", "condition": "close > highest(20) AND volume > volume_ma(20)", "action": "BUY"}]},
+        {"id": "holding", "label": "持仓管理", "transitions": [{"to": "watch", "condition": "trailing_stop 8%", "action": "SELL"}, {"to": "watch", "condition": "holding_days > 20", "action": "SELL"}]}
+      ]
+    },
+    "backtest": null,
+    "status": "builder_failed_no_backtest",
+    "failure_reason": "builder_session_corrupted_after_multi_turn",
+    "session_id": "research_TKT-2026-005B-smoke",
+    "checkpoint": "memory"
+  }
+}

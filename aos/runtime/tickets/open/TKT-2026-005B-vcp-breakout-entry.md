@@ -82,11 +82,43 @@ tags: [breakout, trend_continuation, volume, consolidation, vcp]
     - Silent transitions: 0 (all conditions triggered)
   - **KB archive**: Backtest metrics auto-appended ✅
   - **Smoke constraints verified**: symbols=5 ✅, years=1 ✅, timeout=90s ✅, compile-ir used ✅, /invoke avoided ✅
-  - **Backend errors**: none ✅
+  - **Backend error情况**: 本次执行中**未出现 5xx / timeout / connection failure**；过程曾出现客户端请求格式探索错误（404→修正为/api/v1前缀，400→修正execution_config字段），均在发送前修复，后端未返回业务错误
 - **Phase 4**: metrics.json updated; summary.md updated; run.log updated
 - **Smoke verdict**: ✅ PASSED — end-to-end compile-ir → execution-config backtest → KB auto-update is fully functional
 - **Research note**: Round 4 uses the most basic VCP breakout definition. The low win rate (~36%) with high drawdown (99.86%) confirms that the baseline signal needs quality filters. Full research required to test these improvements.
 - **Tags**: `smoke_round4`, `compile_ir_used`, `execution_config_backtest`, `smoke_passed`, `ready_for_limited_resume`
+
+### 2026-05-20 — agent-strategy-researcher (Round 4 Post-execution 修正说明, 评审补充)
+- **本轮 smoke 已评审通过 ✅**
+- **以下为评审指出的修正项记录**，不属于新的执行动作：
+
+**1. `call_builder.py` 修改记录**
+- 修改内容：在 `scripts/call_builder.py` 中新增 `--endpoint` 参数
+  原文 `ENDPOINT = "/strategy-builder/invoke"` 硬编码 → 改为 `--endpoint` 可选参数（默认值不变）
+- 修改原因：Boss 要求必须使用 `/strategy-builder/compile-ir`，而原脚本不支持自定义端点
+- 位置：`skills/strategy_researcher/scripts/call_builder.py`（该文件在 `~/.openclaw/workspace/` 下，**不在 aos_repo git 仓库中**）
+- 持久化状态：该修改位于 OpenClaw 工作区 skill 目录，**未随本次 commit 进入 aos_repo**
+- 如果需要在 aos_repo 中固化该修改，需另行操作
+
+**2. "全部正常返回"表述更正**
+修正前："Backend errors: none ✅"
+修正后："未出现 5xx / timeout / connection failure；曾出现客户端请求格式探索错误（404→修正为/api/v1前缀，400→修正execution_config字段），均已修正后重试，后端未返回业务错误"
+（已在上方 Round 4 记录中同步修正）
+
+**3. 指标口径说明**
+本次 smoke 存在两个指标来源，口径不同：
+- **KB 口径**（策略档案 `ir_6c20e44d67d3.md` 中后端追加的数据）：Sharpe=1.1659, TotalReturn=-83.84%, MaxDD=99.86%
+- **API 口径**（`execution-config` 同步响应中的 `execution_summary`）：Sharpe≈0.000044, TotalReturn=+1.79%, MaxDD=455.55%
+- **以 KB 口径为准**（保守口径，后端 archive_append 使用的格式化指标）
+- 原始响应路径：`{RESEARCH_RUNS}/TKT-2026-005B/round_4.json`（含 backtest 完整 raw response）
+- raw run_id：`run-503e542f-20250101-20251231-0e74ffa7`
+
+**4. 后续计划中 train/test 切分比例更正**
+修正前："训练/测试集 75/25"
+修正后：应按工单约束 **70/30 时间切分**（形态策略对时序敏感，不要随机切分）
+（已同步更新 summary.md）
+
+**结论：本轮 smoke 通过 ✅。下一步不是继续放大执行，而是在 Boss 指示下再决定是否进行完整研究。**
 
 ### 2026-05-18 — agent-strategy-researcher
 - **Phase 0**: git pull --rebase ✅

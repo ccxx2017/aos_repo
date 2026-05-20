@@ -33,7 +33,7 @@
 2. Add volatility-based trailing stop (replace pure time stop)
 3. Test sensitivity of "trend" pre-condition (MA slope before breakout)
 4. Test wider universe (full intended A-share scope)
-5. Train/test split (75/25) instead of full window
+5. Train/test split (70/30 time split as per ticket constraint) instead of full window
 
 ## Next Steps
 Wait for Boss review of Round 4 smoke results. Not authorized for full research resume.

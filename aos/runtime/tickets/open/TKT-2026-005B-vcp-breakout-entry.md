@@ -1,9 +1,9 @@
 ---
-ticket_id: TKT-2026-00X
+ticket_id: TKT-2026-005B
 title: VCP 形态突破点入场策略研究
 intent_type: investigation
 assigned_to: agent-strategy-researcher
-status: paused_for_boss_review
+status: ready_for_limited_resume
 priority: normal
 created_by: Boss
 created_at: 2026-05-08
@@ -60,7 +60,7 @@ tags: [breakout, trend_continuation, volume, consolidation, vcp]
 ## 交付要求
 
 按 `prompts/report_template.md` 标准交付，报告命名：
-`TKT-2026-00X-vcp-breakout-entry.md`
+`TKT-2026-005B-vcp-breakout-entry.md`
 
 ## Worklog
 
@@ -130,4 +130,25 @@ tags: [breakout, trend_continuation, volume, consolidation, vcp]
 - **Resume conditions**:
   1. `TKT-2026-005C` (script-side hard limits on universe size, backtest timeout guard) must be implemented first.
   2. Backend async transformation required — synchronous HTTP backtest blocks the builder after ~50+ stock universes.
-  3. When resumed, start from Round 3 with simplified entry conditions (relax volume & ATR simultaneous constraints).
+  3. When resumed, start from Round 4 with simplified entry conditions (relax volume & ATR simultaneous constraints).
+
+### 2026-05-20 — Boss (restore pre-patch authorisation)
+- **状态变更**: `paused_for_boss_review` → `ready_for_limited_resume`
+- **工单迁移**: `blocked/` → `open/`
+- **授权性质**: 仅允许进入**受限恢复 smoke**，**不是完整研究恢复**
+- **Boss 确认的前置条件**:
+  1. `TKT-2026-005C` 资源闸已完成
+  2. `TKT-2026-005D` auto research 编译接口已完成
+  3. `TKT-2026-005E` 技术 E2E smoke 已通过
+- **恢复起点**: 正式恢复时**从 Round 4 开始**
+- **Builder 调用要求**:
+  1. `strategy-researcher` 必须调用 `call_builder.py --endpoint /strategy-builder/compile-ir`
+  2. **明确禁止**旧端点 `/strategy-builder/invoke`
+- **保留限制（继续有效）**:
+  1. `symbols ≤ 5`
+  2. `years ≤ 1`
+  3. `timeout = 90s`
+  4. 失败一次即 `paused_for_boss_review`
+  5. **禁止自动重试**
+  6. **禁止 231 标的大回测**
+  7. 受限阶段结果不得视为完整研究结论

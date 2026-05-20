@@ -1,0 +1,127 @@
+工单：TKT-2026-005E-technical-e2e-smoke
+实施主体：project-ai-backend-developer (项目AI/开发智能体，非 strategy-researcher)
+意图类型：infrastructure_patch
+
+任务：
+1. 手写一个极简的 VCP 策略 IR JSON（包含1-5只标的，2025年1年窗口）。
+2. 编写一个临时的 bash/python 验证脚本，模拟 strategy-researcher 的核心工具调用链：
+   a. 调用 `call_builder.py`（需指向新端点 /strategy-builder/compile-ir），验证是否成功拿到 strategy_id，且 data/knowledge/ 目录下生成了新 md 档案。
+   b. 调用 `call_backtest.py` 传入该 strategy_id 进行回测，验证是否成功返回 200 瘦响应。
+   c. 调用 `kb_query.py` 读取该策略档案，验证回测指标是否已被后端自动追加进 md 档案中。
+3. 整个过程中，验证后端没有产生任何僵死进程，且没有触发任何 500 序列化错误。
+
+---
+
+## Worklog
+
+### 1. 实施内容
+- 新增临时 smoke 脚本：`backend/tests/manual/validate_tkt_2026_005e.py`
+- 扩展 `openclaw_skills/skills/strategy_researcher/scripts/call_builder.py`
+  - 新增 `--endpoint` 参数，使其可显式指向 `/strategy-builder/compile-ir`
+- 修复 `backend/app/api/endpoints/backtests/start.py`
+  - 在 `/backtests/execution-config` 成功回测后自动调用 `append_backtest_result(...)` 与 `update_index()`
+  - 使 `kb_query.py archive <strategy_id>` 能读取到刚刚回测追加的指标块
+- 更新回归测试：`backend/tests/api/endpoints/test_backtests_refactored.py`
+
+### 2. 自动化回归
+执行命令：
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest backend/tests/api/endpoints/test_backtests_refactored.py backend/tests/api/endpoints/test_strategy_skill_endpoints_e1.py backend/tests/api/endpoints/test_error_envelope.py -q
+```
+
+结果：
+
+```text
+15 passed, 3 deselected in 1.27s
+```
+
+### 3. 技术性 E2E Smoke
+执行命令：
+
+```powershell
+.\.venv\Scripts\python.exe backend\tests\manual\validate_tkt_2026_005e.py
+```
+
+该脚本实际完成了以下步骤：
+- 启动本地 `uvicorn` 后端服务
+- 构造极简 VCP IR JSON，时间窗口为 `2025-01-01 ~ 2025-12-31`
+- 通过 `call_builder.py --endpoint /strategy-builder/compile-ir` 调用新编译端点
+- 通过 `call_backtest.py` 调用 `/api/v1/backtests/execution-config`
+- 通过 `kb_query.py archive <strategy_id>` 读取 KB 档案
+- 停止本地服务并检查进程是否已清理
+- 扫描服务日志确认不存在 `not JSON serializable` 与 `500 Internal Server Error`
+
+### 4. Smoke 关键输出
+
+#### 4.1 Builder
+
+```json
+{
+  "ok": true,
+  "status": 200,
+  "data": {
+    "success": true,
+    "strategy_id": "tkt_2026_005e_vcp_20260520_112938",
+    "compiler_status": "compiled",
+    "archive_created": true,
+    "warnings": []
+  }
+}
+```
+
+结论：
+- 成功拿到 `strategy_id`
+- `data/knowledge/strategies/tkt_2026_005e_vcp_20260520_112938.md` 已生成
+
+#### 4.2 Backtest
+
+```json
+{
+  "ok": true,
+  "retried": false,
+  "run_id": "run-c98fc790-20250101-20251231-a6186695",
+  "task_id": "run-c98fc790-20250101-20251231-a6186695",
+  "status": "completed",
+  "message": "回测已完成"
+}
+```
+
+结论：
+- 成功返回 200 瘦响应
+- 实际回测窗口为 2025 年整年
+- 标的集合为 5 只 A 股：`000001.SZ / 600519.SH / 601318.SH / 600036.SH / 300750.SZ`
+
+#### 4.3 KB Query
+档案中命中以下关键片段：
+
+```text
+### Run run-c98fc790-20250101-20251231-a6186695
+- Period: 2025-01-01 → 2025-12-31
+- **Annualized Return**: ...
+- **Sharpe Ratio**: ...
+- **Max Drawdown**: ...
+```
+
+结论：
+- 回测结果已被后端自动追加进策略 markdown 档案
+- `kb_query.py archive <strategy_id>` 能够成功读出追加后的回测指标
+
+### 5. 进程与 500 序列化检查
+脚本最终输出中的关键字段：
+
+```json
+{
+  "ok": true,
+  "server_started": true,
+  "server_process_cleaned": true,
+  "no_500_serialization_error": true,
+  "no_http_500": true
+}
+```
+
+结论：
+- 后端服务可正常启动与关闭
+- 未发现僵死进程残留
+- 未触发 `ValueError is not JSON serializable` 一类 500 序列化错误
+- 本工单 smoke 验证通过

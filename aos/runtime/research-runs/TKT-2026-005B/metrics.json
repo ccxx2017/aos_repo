@@ -1,17 +1,33 @@
 {
-  "ticket_id": "TKT-2026-005B",
-  "run_dir": "/home/ccxx/aos_repo/aos/runtime/research-runs/TKT-2026-005B",
-  "rounds": [
-    {
-      "round": 1,
-      "status": "no_backtest",
-      "hypothesis": "A股VCP形态突破可通过4阶段IR量化: 观望→回调整理(缩量+波动收缩)→放量突破→持仓止损。5个条件(回撤<60%+ATR收缩<0.8+量比<0.7+放量>1.5倍+突破20日高)同时满足时有统计优势。"
+  "num_rounds": 4,
+  "num_with_backtest": 1,
+  "rounds": {
+    "1": {
+      "status": "completed",
+      "sharpe_ratio": null,
+      "annualized_return": null,
+      "max_drawdown": null,
+      "trade_count": 0
+    },
+    "3": {
+      "status": "smoke_incomplete",
+      "sharpe_ratio": null,
+      "annualized_return": null,
+      "max_drawdown": null,
+      "trade_count": null
+    },
+    "4": {
+      "status": "smoke_completed",
+      "sharpe_ratio": 1.1659,
+      "annualized_return": -0.8279,
+      "max_drawdown": 0.9986,
+      "calmar_ratio": -0.829,
+      "win_rate": 0.3608,
+      "trade_count": 97,
+      "run_id": "run-503e542f-20250101-20251231-0e74ffa7",
+      "note": "Round 4 是受限 smoke，不是完整研究结论"
     }
-  ],
-  "summary": {
-    "num_rounds": 1,
-    "num_with_backtest": 0,
-    "best_by_sharpe_ratio": null,
-    "best_by_calmar_ratio": null
-  }
+  },
+  "best_by_sharpe_ratio": "round_4",
+  "best_by_calmar_ratio": null
 }

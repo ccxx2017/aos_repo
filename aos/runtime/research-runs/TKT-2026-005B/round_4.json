@@ -1,0 +1,30 @@
+{
+  "hypothesis": "简化 VCP 突破入场：放量突破 20 日最高价 + 20 日时间止损",
+  "rationale": "Round 1 失败根因是互斥条件（同时要求放量和缩量），导致 0 笔交易。Round 4 从最简基线开始：只保留「放量突破 20 日高」一个买入条件 + 20 日时间止损，验证 VCP 突破模式在 A 股 5 只标的上是否有最基本的正收益信号。",
+  "changed_from_prior": "相对 Round 1：删除全部冲突条件（ATR 收敛、drawdown 阈值），仅保留 close>20d_high AND volume>volume_ma(20) 作为买入条件。删除 builder 多轮对话路径，改为通过 compile-ir 端点直接提交 IR + execution-config 直连回测。",
+  "based_on_archives": [],
+  "based_on_insights": [],
+  "compile_response": {
+    "ok": true,
+    "strategy_id": "ir_6c20e44d67d3",
+    "compiler_status": "compiled",
+    "archive_created": true,
+    "warnings": ["auto_backtest 已在 compile-ir 通道中被强制关闭"]
+  },
+  "backtest_response": {
+    "ok": true,
+    "retried": false,
+    "run_id": "run-503e542f-20250101-20251231-0e74ffa7",
+    "status": "completed",
+    "total_symbols": 5,
+    "symbols_with_trades": 5,
+    "total_trades": 97,
+    "cumulative_return": 0.017889878469760756,
+    "annualized_return": 0.02017641570518669,
+    "max_drawdown": 4.555475981158559,
+    "sharpe_ratio": 4.434099931003668e-05,
+    "win_rate": 0.3711340206185567,
+    "profit_loss_ratio": 0.6415765187218959
+  },
+  "analysis": "Round 4 smoke 验证结果：\n1. ✅ compile-ir 端点正常——IR 编译成功，KB 档案自动创建并追加回测结果\n2. ✅ 条件全部触发——97 笔交易，silent_transitions=0（相对 Round 1 的 0 笔重大改进）\n3. ❌ 总收益为负（-83.84% from KB，API 显示 +1.79%）——数据口径不同需确认\n4. ⚠️ 最大回撤 99.86%——放量突破 20 日高条件过于宽松，抓取了大量弱势标的的假突破\n5. 初步结论：纯放量突破 20 日高的基线信号有交易价值（不沉默），但胜率低（36%），需要增加质量过滤条件\n6. 不适合作为正式结论——本轮为受限 smoke"
+}

@@ -46,3 +46,23 @@
 - Smoke constraints verified: symbols=5 ✅, years=1 ✅ (2025-01-01 to 2025-12-31), timeout=90s ✅
 - No backend failure / 5xx / timeout/connection failure on the builder endpoint (builder responded 200 each time but never executed backtest)
 - Backend 500 only on our manual direct backtest call (not builder-triggered)
+
+### Round 4 (Limited Resume Smoke — 2026-05-20 18:00 CST)
+- Phase 0: git pull --rebase ✅ (already up to date)
+- Phase 1: ticket validation ✅ (intent=investigation, assigned_to=agent-strategy-researcher, status=ready_for_limited_resume)
+- Phase 2: KB re-read ✅ (archives — 36+ strategies, log — smoke tests from TKT-2026-005E visible)
+- Phase 3 Round 4:
+  - Path: compile-ir + execution-config (NOT /strategy-builder/invoke)
+  - compile-ir request: POST /api/v1/strategy-builder/compile-ir with strategy_ir + metadata (5 symbols, 1 year)
+  - compile-ir response: ✅ strategy_id=ir_6c20e44d67d3, compiler_status=compiled, archive_created=true
+  - Warning: auto_backtest disabled in compile-ir channel
+  - execution-config backtest: POST /api/v1/backtests/execution-config with strategy_ir embedded + universe + backtest_params
+  - Backend response: ✅ run_id=run-503e542f-20250101-20251231-0e74ffa7, status=completed, 97 trades
+  - KB archive auto-updated: trade metrics appended ✅
+  - Smoke constraints verified: symbols=5 ✅, years=1 ✅, timeout=90s ✅, compile-ir used ✅, /invoke avoided ✅
+  - No backend failure / timeout / 5xx on this call
+- Phase 4: metrics.py aggregate → marks as no_backtest (parser limitation for compile-ir path). Updated manually.
+- Phase 5: Worklog appended.
+- Phase 6: git commit + push.
+- Smoke result: PASS ✅ (IR compiles → backtest runs → KB updates → no backend errors)
+- Tags: `smoke_round4`, `compile_ir`, `execution_config_backtest`, `smoke_passed`, `ready_for_limited_resume`

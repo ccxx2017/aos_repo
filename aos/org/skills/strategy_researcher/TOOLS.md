@@ -1,6 +1,6 @@
 # Tools · strategy-researcher
 
-本清单对应 SKILL.md v0.2.0。
+本清单对应 SKILL.md v0.2.1。
 
 ## 通用约定
 

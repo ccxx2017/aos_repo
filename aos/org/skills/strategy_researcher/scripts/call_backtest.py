@@ -9,12 +9,14 @@
 - max_years=3     — 回测时间窗口最多 3 年
 - timeout=90s     — HTTP 请求超时
 
-Input (stdin, JSON): {"execution_config": {...}, "run_id": "optional"}
+Input (stdin, JSON): {"execution_config": {...}, "run_id": "optional", "train_split": 0.7}
 Output (stdout, JSON): {"ok": bool, "run_id": "...", "status": "completed", "retried": bool, ...}
 Exit codes: 0 success, 1 retryable (network), 2 business error.
 
 Behavior:
 - On HTTP 200, extract data.run_id / data.status and return.
+- If the backend returns split backtest fields such as train_metrics / test_metrics,
+  keep them intact under raw.data and also mirror them to top-level convenience fields.
 - On HTTP 400 with code=DATA_MISSING_SYNC_REQUIRED, remove missing_symbols from
   execution_config.universe.symbols and retry ONCE. If still failing, return error.
 - Other 400 codes (INVALID_EXECUTION_CONFIG / UNSUPPORTED_UNIVERSE_TYPE / EMPTY_UNIVERSE)
@@ -150,6 +152,11 @@ def _summarize_success(payload: dict, retried: bool) -> dict:
         "run_id": data.get("run_id"),
         "task_id": data.get("task_id"),
         "status": data.get("status"),
+        "metrics": data.get("metrics"),
+        "train_metrics": data.get("train_metrics"),
+        "test_metrics": data.get("test_metrics"),
+        "phase_stats": data.get("phase_stats"),
+        "train_split": data.get("train_split"),
         "message": payload.get("message"),
         "raw": payload,
     }

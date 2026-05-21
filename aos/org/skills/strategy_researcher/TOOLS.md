@@ -33,13 +33,13 @@
 | 项 | 内容 |
 |---|---|
 | 用途 | POST `/backtests/execution-config`，自动处理 `DATA_MISSING_SYNC_REQUIRED` 的单次重试 |
-| 入参 | JSON 请求体，至少含 `execution_config.universe.symbols` **且必须传入完整 `strategy_ir`**（不可只传 `strategy_id`） |
-| 出参 | `{"ok": true, "retried": bool, "run_id": "...", "status": "completed", ...}` |
+| 入参 | JSON 请求体，至少含 `execution_config.universe.symbols` **且必须传入完整 `strategy_ir`**（不可只传 `strategy_id`）；如需样本内外回测，可在顶层追加 `train_split`（如 `0.7`） |
+| 出参 | `{"ok": true, "retried": bool, "run_id": "...", "status": "completed", ...}`；若请求含 `train_split`，会在 `raw.data.train_metrics` / `raw.data.test_metrics` 原样保留后端结果，并镜像到顶层 `train_metrics` / `test_metrics` |
 | 关键参数 | `--base-url` `--timeout` `--input-file` `--no-retry-on-missing-data` |
 | 重试策略 | 仅 `DATA_MISSING_SYNC_REQUIRED` 且 `missing_symbols` 非空时剔除后重试 1 次；剔后 universe 为空 → `empty_universe_after_prune`(2) |
 | 错误码 | `invalid_json_input`(2) · `http_4xx`(2, 客户端格式探索) · `http_5xx`(2, 一票暂停) · `retry_failed`(2) · `empty_universe_after_prune`(2) · `network_error`(1) |
 | **回测传参要求** | execution-config 必须传完整 `strategy_ir`（builder compile-ir 返回的中间表示），不得只传 `strategy_id` |
-| 示例 | `python3 scripts/call_backtest.py --input-file req.json` |
+| 示例 | `echo '{"execution_config":{"universe":{"type":"explicit","symbols":["000300.SH","000905.SH"]},"backtest_params":{"start_date":"2020-01-01","end_date":"2023-01-01"},"strategy_ir":{...}},"train_split":0.7}' \| python3 scripts/call_backtest.py` |
 
 ### scripts/kb_query.py
 

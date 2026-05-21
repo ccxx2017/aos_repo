@@ -129,9 +129,14 @@ builder compile-ir 成功后会在副作用中调 `create_strategy_archive` +
       "end_date": "2023-01-01"
     },
     "strategy_ir": <compile-ir 返回的完整 IR 对象>
-  }
+  },
+  "train_split": 0.7
 }
 ```
+
+- 若工单明确要求“样本内外对比”、“过拟合检查”、“样本外 Sharpe/回撤判断”或同义要求，
+  **必须**在本次回测请求里显式传入 `train_split`
+- 若未传 `train_split`，则本轮只能得到全样本 `metrics`，不得假装自己完成了样本内外比较
 
 - 成功 → 提取回测指标（`metrics`, `train_metrics`, `test_metrics`, `phase_stats`）
 - 超时 / 5xx / 连接失败 → **一票暂停**，该轮标记 `backend_unreachable`，立即进入 `paused_for_boss_review`

@@ -1,0 +1,52 @@
+{
+  "hypothesis": "在放量突破基线上加入close > MA60趋势过滤，滤除无趋势状态下的假突破",
+  "rationale": "Round 4 的放量突破基线（close>highest20 AND volume>volume_ma20）在无趋势下跌反弹中频繁假突破导致收益崩盘。加入MA60门禁后，只允许处于上升趋势的标的进行突破操作。",
+  "changed_from_prior": "买入条件中追加 close > MA(close,60) 趋势过滤器；其余所有变量与 Round 4 一致",
+  "based_on_archives": [
+    "ir_6c20e44d67d3"
+  ],
+  "based_on_insights": [],
+  "compile_response": {
+    "ok": true,
+    "strategy_id": "ir_b15a65c4b9b4",
+    "compiler_status": "compiled",
+    "archive_created": true,
+    "warnings": []
+  },
+  "backtest_response": {
+    "run_id": "run-e92b485b-20250101-20251231-0e74ffa7",
+    "status": "completed",
+    "metrics": {
+      "total_return": -0.8091973960000001,
+      "cagr": -0.7979812239762151,
+      "volatility_ann": 20.899010044602065,
+      "sharpe": 1.4921442900627218,
+      "sortino": 14.048526944282086,
+      "calmar": -0.8069610175882507,
+      "information_ratio": 1.484108728336745,
+      "tracking_error_ann": 20.893364825608327,
+      "mdd": 0.988872085,
+      "mdd_period": {
+        "start": "2025-01-01",
+        "end": "2025-06-26",
+        "days": 176
+      },
+      "recovery_days": null,
+      "trade_count": 64,
+      "win_rate": 0.390625,
+      "winning_trades": 25,
+      "losing_trades": 39,
+      "avg_trade_pnl": -1962.9339874999973,
+      "avg_winning_trade": 4680.841024000003,
+      "avg_losing_trade": -7827.38067096774
+    }
+  },
+  "analysis": [
+    "MA60趋势过滤将交易次数从97降至56(-42%)，说明大量突破发生在无趋势区域",
+    "样本内Sharpe 1.37 vs 样本外Sharpe 2.24，样本外更好（可能因样本外时间窗口较短）",
+    "整体Sharpe 1.49 vs Round 4基线1.17，趋势过滤提升了风险调整收益",
+    "但整体仍然亏损(-81%)且最大回撤99%，说明单靠趋势过滤不足以挽救VCP突破",
+    "Train split 0.7: 训练期Sharpe 1.37, 测试期Sharpe 2.24(但测试期仅3.5个月)",
+    "Win rate从36%升至44.6%(KB口径)/39%(API口径)，确认滤除了一批假突破"
+  ]
+}

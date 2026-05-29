@@ -3,7 +3,7 @@ ticket_id: TKT-2026-005B
 title: VCP 形态突破点入场策略研究
 intent_type: investigation
 assigned_to: agent-strategy-researcher
-status: ready_for_limited_resume
+status: Round 5.5-`baseline_frozen_waiting_explicit_round6_approval`
 priority: normal
 created_by: Boss
 created_at: 2026-05-08
@@ -63,6 +63,51 @@ tags: [breakout, trend_continuation, volume, consolidation, vcp]
 `TKT-2026-005B-vcp-breakout-entry.md`
 
 ## Worklog
+
+### 2026-05-29 — Round 6 Preflight Local Archival
+- **Round 6 Preflight**: fully passed
+- **Feishu Agent API preflight**: passed
+- **Project AI local train_split confirmation**: passed
+- **Accepted baseline run_id**: `run-54b-20250101-20251230-d37c696d`
+- **Local train_split binding**: `train_split=0.7` confirmed via local baseline metadata freeze
+- **Execution gate**: Round 6 remains `locked / not_started / requires explicit approval`
+- **Operational note**: 本次仅补充归档，不运行回测，不修改策略，不创建新 run，不进入 Round 6A
+
+### 2026-05-29 — Round 5.5 Baseline Freeze & Handoff
+- **Round 5.4B-fix1**: passed
+- **Accepted baseline run_id**: `run-54b-20250101-20251230-d37c696d`
+- **Obsolete failed run_id**: `run-54b-20250101-20251230-dfc9611d`
+- **Round 6**: `locked / not_started / requires explicit approval`
+- **Baseline freeze verdict**: `run-54b-20250101-20251230-d37c696d` frozen as the only legal clean full-period baseline for subsequent work
+- **Evidence summary**:
+  - `initial_capital=100000` 全链路一致
+  - `canonical_fills` cash rebuild passed
+  - `canonical_positions` rebuild passed
+  - `canonical_portfolio` equity identity passed
+  - derived files match canonical artifacts
+  - metrics only count closed trades
+  - open trade excluded from win/loss/win_rate/avg_trade_pnl
+  - API payloads bound to accepted run_id
+  - no old run contamination
+- **Baseline metadata**:
+  - `baseline_name=round54b_fix1_full_period_baseline`
+  - `run_id=run-54b-20250101-20251230-d37c696d`
+  - `status=accepted_frozen`
+  - `start_date=2025-01-01`
+  - `end_date=2025-12-30`
+  - `initial_capital=100000`
+  - `train_split=0.7`
+  - `universe_size=5`
+  - `closed_trades=18`
+  - `open_trades=1`
+  - `canonical_fills_row_count=37`
+  - `artifact_valid=true`
+  - `allowed_as_round6_baseline=true`
+  - `round6_status=locked_until_explicit_approval`
+- **Disabled runs**:
+  - `run-e92b485b-*`: pre-canonical accounting chain，ledger inconsistency，不得作为后续 baseline
+  - `run-54b-20250101-20251230-dfc9611d`: initial_capital 和 metrics blocker，不得作为后续 baseline
+- **Handoff note**: 后续如需进入 Round 6，必须由用户显式批准；本工单当前保持 freeze 状态，不自动推进
 
 ### 2026-05-20 — agent-strategy-researcher (Round 4 — Limited Resume Smoke ✅)
 - **Phase 0**: git pull --rebase ✅

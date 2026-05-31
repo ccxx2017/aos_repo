@@ -3,7 +3,7 @@ ticket_id: TKT-2026-005B
 title: VCP 形态突破点入场策略研究
 intent_type: investigation
 assigned_to: agent-strategy-researcher
-status: Round 5.2:completed / reconciliation_failed / backtest_invalid
+status: Round 5.4B-fix1: passed;Round 5.5 baseline freeze: accepted;Accepted baseline: run-54b-20250101-20251230-d37c696d;Round 6 Preflight: fully passed and archived;Round 6 Execution: locked / not_started / requires explicit approval;Next valid action: optional explicit approval for Round 6A only
 priority: normal
 created_by: Boss
 created_at: 2026-05-08
